@@ -67,7 +67,7 @@ class AiKidsAcademyApp extends StatelessWidget {
           elevation: 4,
         ),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: CardTheme(
         elevation: 6,
         shadowColor: Colors.black26,
         shape: RoundedRectangleBorder(
