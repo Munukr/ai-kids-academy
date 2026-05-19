@@ -1,0 +1,496 @@
+{
+  "lessons": [
+    {
+      "id": "lesson_1",
+      "title": "What is AI?",
+      "description": "Discover what artificial intelligence is!",
+      "emoji": "🤖",
+      "content": [
+        {
+          "type": "text",
+          "text": "AI stands for Artificial Intelligence. It's a special kind of computer program that can THINK and LEARN — just like you do at school!"
+        },
+        {
+          "type": "mascot",
+          "text": "Hi! I'm Beep, your robot friend! I'm an AI too! I was taught by people who wrote lots and lots of instructions for me. 🤖"
+        },
+        {
+          "type": "text",
+          "text": "AI is all around us! It helps phones recognize your face, suggests songs you might like, and even helps doctors find when someone is sick."
+        },
+        {
+          "type": "mascot",
+          "text": "AI learns from examples — the more it learns, the smarter it gets! Just like you get better at drawing the more you practice! 🎨"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What does AI stand for?",
+          "options": ["Awesome Invention", "Artificial Intelligence", "Animal Imagination", "Amazing Internet"],
+          "correct": 1
+        },
+        {
+          "question": "What can AI do?",
+          "options": ["Eat pizza", "Think and learn", "Fly in the sky", "Grow vegetables"],
+          "correct": 1
+        },
+        {
+          "question": "Where do we find AI in everyday life?",
+          "options": ["Only in books", "Only at school", "In phones and computers", "Only in space"],
+          "correct": 2
+        }
+      ]
+    },
+    {
+      "id": "lesson_2",
+      "title": "How to Ask Clearly",
+      "description": "Learn how to ask good questions!",
+      "emoji": "💬",
+      "content": [
+        {
+          "type": "text",
+          "text": "When you talk to an AI, you give it instructions called PROMPTS. A clear prompt helps the AI give you exactly what you need!"
+        },
+        {
+          "type": "mascot",
+          "text": "Think of it like asking a friend for help. If you say 'help me', your friend doesn't know what to do! But if you say 'help me tie my shoes', your friend knows exactly what you need! 👟"
+        },
+        {
+          "type": "text",
+          "text": "A clear question has: WHO you are talking to, WHAT you want, and HOW you want it. The more details you give, the better the answer will be!"
+        },
+        {
+          "type": "mascot",
+          "text": "Try this: Instead of 'tell me about dogs', say 'tell me 3 fun facts about golden retrievers for a 6-year-old.' Much better! 🐕"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What is a 'prompt' when talking to AI?",
+          "options": ["A type of robot", "An instruction you give to AI", "A computer game", "A kind of food"],
+          "correct": 1
+        },
+        {
+          "question": "Which question is clearer?",
+          "options": ["Tell me stuff", "Help!", "Tell me 3 fun facts about cats for kids", "Animals"],
+          "correct": 2
+        },
+        {
+          "question": "Why do we give AI detailed instructions?",
+          "options": ["Just for fun", "So AI gives better answers", "To make AI confused", "Because AI likes long texts"],
+          "correct": 1
+        }
+      ]
+    },
+    {
+      "id": "lesson_3",
+      "title": "Good Prompt vs Bad Prompt",
+      "description": "Spot the difference between great and not-so-great questions!",
+      "emoji": "✅",
+      "content": [
+        {
+          "type": "text",
+          "text": "A BAD prompt is too short and vague. A GOOD prompt is clear, specific, and tells the AI exactly what you want!"
+        },
+        {
+          "type": "mascot",
+          "text": "❌ Bad prompt: 'Story'\n✅ Good prompt: 'Write a short funny story about a dragon who is afraid of fire, for a 6-year-old.' See the difference? 🐉"
+        },
+        {
+          "type": "text",
+          "text": "Good prompts tell the AI:\n🎯 What topic you want\n📝 What type of answer (story, list, explanation)\n👶 Who it's for (kids, adults)\n📏 How long or short"
+        },
+        {
+          "type": "mascot",
+          "text": "Practice makes perfect! Every time you ask a question, try to add one more detail. You'll be amazed how much better the answers get! ⭐"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "Which is a GOOD prompt?",
+          "options": ["Cats", "Write a poem", "Write a short poem about a playful kitten for kids", "Tell me something"],
+          "correct": 2
+        },
+        {
+          "question": "What makes a prompt 'bad'?",
+          "options": ["It's too specific", "It's too short and vague", "It's too polite", "It uses many words"],
+          "correct": 1
+        },
+        {
+          "question": "Adding details to your question makes the AI answer...",
+          "options": ["Worse", "Slower", "Better and more helpful", "Shorter"],
+          "correct": 2
+        }
+      ]
+    },
+    {
+      "id": "lesson_4",
+      "title": "Describing Images",
+      "description": "Learn how to describe pictures to AI!",
+      "emoji": "🖼️",
+      "content": [
+        {
+          "type": "text",
+          "text": "AI can create amazing pictures if you describe them well! This is called image generation. You use words to paint a picture in the AI's mind."
+        },
+        {
+          "type": "mascot",
+          "text": "Imagine you want a picture of a birthday party. Instead of just 'party', try: 'A colorful birthday party with balloons, a big cake, and happy children in a sunny garden.' 🎂"
+        },
+        {
+          "type": "text",
+          "text": "Great image descriptions include:\n🎨 Colors you want\n🌍 The place or setting\n👥 Who or what is in the picture\n😊 The mood (happy, magical, funny)"
+        },
+        {
+          "type": "mascot",
+          "text": "The more vivid your description, the more beautiful the image! Think of yourself as an artist painting with words! 🎨✨"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What is 'image generation'?",
+          "options": ["Printing photos", "AI creating pictures from descriptions", "Drawing on paper", "Watching movies"],
+          "correct": 1
+        },
+        {
+          "question": "Which image description is better?",
+          "options": ["A cat", "A fluffy orange cat sleeping in a sunny window with flowers around it", "Something nice", "Picture please"],
+          "correct": 1
+        },
+        {
+          "question": "What should you include in an image description?",
+          "options": ["Only the color", "Colors, setting, characters, and mood", "Just a single word", "The price"],
+          "correct": 1
+        }
+      ]
+    },
+    {
+      "id": "lesson_5",
+      "title": "Asking for Stories",
+      "description": "Let AI create amazing stories for you!",
+      "emoji": "📖",
+      "content": [
+        {
+          "type": "text",
+          "text": "AI is a fantastic storyteller! You can ask it to create personalized stories with YOUR favorite characters, settings, and adventures!"
+        },
+        {
+          "type": "mascot",
+          "text": "Want a story about YOU as a superhero? Just ask! Try: 'Write a short adventure story where a 6-year-old named Alex saves a magical forest from a grumpy cloud.' ☁️⚡"
+        },
+        {
+          "type": "text",
+          "text": "Great story requests include:\n🦸 The main character\n🏰 Where the story happens\n🎯 The challenge or problem\n😄 The mood (funny, exciting, magical)\n📏 How long (short, medium, long)"
+        },
+        {
+          "type": "mascot",
+          "text": "You're the director! Tell AI exactly what kind of story you want. You can even ask it to add twists, lessons, or your favorite animals! 🦁📚"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "Can you include your own name in a story request?",
+          "options": ["No, never", "Yes, AI can personalize stories", "Only sometimes", "Only if you're famous"],
+          "correct": 1
+        },
+        {
+          "question": "Which story request is best?",
+          "options": ["Story", "Write me a funny short story", "Write a funny story about a 6-year-old who can talk to animals in a magical jungle", "Give me words"],
+          "correct": 2
+        },
+        {
+          "question": "What is good to include in a story request?",
+          "options": ["Only the title", "Characters, setting, and mood", "Just 'make it good'", "Nothing, AI figures it out"],
+          "correct": 1
+        }
+      ]
+    },
+    {
+      "id": "lesson_6",
+      "title": "Safe Homework Help",
+      "description": "How to use AI to help you learn — the right way!",
+      "emoji": "📚",
+      "content": [
+        {
+          "type": "text",
+          "text": "AI can be a great homework helper! But there's an important rule: use AI to LEARN, not to cheat. Ask AI to explain things, not just give you answers."
+        },
+        {
+          "type": "mascot",
+          "text": "Instead of: 'What is 5+3?' (you can do that yourself!)\nTry: 'Can you explain why 5+3=8 using apples as an example?' That way you actually learn! 🍎"
+        },
+        {
+          "type": "text",
+          "text": "Good ways to use AI for homework:\n🔍 Ask it to explain a concept\n📝 Ask for examples to understand better\n🤔 Ask it to quiz you on what you learned\n✍️ Ask it to check if your answer makes sense"
+        },
+        {
+          "type": "mascot",
+          "text": "Always tell a parent or teacher when you use AI for homework. The goal is to understand — not just to finish quickly! Your brain gets stronger when you think! 💪🧠"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What's the best way to use AI for homework?",
+          "options": ["Copy all answers", "Ask AI to do everything", "Ask AI to explain and help you understand", "Never use AI"],
+          "correct": 2
+        },
+        {
+          "question": "Should you tell a parent when you use AI for homework?",
+          "options": ["No, keep it secret", "Yes, always", "Only sometimes", "Only for math"],
+          "correct": 1
+        },
+        {
+          "question": "Why is it better to ask AI to EXPLAIN rather than just give answers?",
+          "options": ["It's faster", "So you actually learn and understand", "Because AI refuses to give answers", "It doesn't matter"],
+          "correct": 1
+        }
+      ]
+    },
+    {
+      "id": "lesson_7",
+      "title": "Online Safety",
+      "description": "Stay safe when using AI and the internet!",
+      "emoji": "🛡️",
+      "content": [
+        {
+          "type": "text",
+          "text": "The internet and AI are amazing tools, but we need to use them safely! Just like wearing a seatbelt in a car, we follow safety rules online too."
+        },
+        {
+          "type": "mascot",
+          "text": "NEVER share with AI or online: your full name, home address, school name, or phone number. These are private, just like a secret! 🔐"
+        },
+        {
+          "type": "text",
+          "text": "Stay safe online:\n✅ Always use AI with a parent nearby\n✅ Tell an adult if something feels weird or scary\n✅ Never share personal information\n✅ Don't meet online friends in real life without parents"
+        },
+        {
+          "type": "mascot",
+          "text": "Remember: AI doesn't know you personally. It's a helpful tool, but it's not your real friend. Your real friends and family are the ones who hug you! 🤗"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "Which information should you NEVER share online?",
+          "options": ["Your favorite color", "Your home address", "Your favorite animal", "Your favorite food"],
+          "correct": 1
+        },
+        {
+          "question": "When using AI, it's best to...",
+          "options": ["Use it alone in secret", "Use it with a parent nearby", "Share personal details", "Believe everything it says"],
+          "correct": 1
+        },
+        {
+          "question": "If something online makes you feel scared or weird, you should...",
+          "options": ["Keep it a secret", "Ignore it", "Tell a trusted adult right away", "Continue looking"],
+          "correct": 2
+        }
+      ]
+    },
+    {
+      "id": "lesson_8",
+      "title": "Is It True?",
+      "description": "Learn to check if information is correct!",
+      "emoji": "🔍",
+      "content": [
+        {
+          "type": "text",
+          "text": "AI is very smart, but it can sometimes make mistakes! It might tell you something that sounds true but isn't. This is called a 'hallucination'."
+        },
+        {
+          "type": "mascot",
+          "text": "Even I, Beep, can sometimes get things wrong! That's why it's super important to check important information with books, teachers, or parents. I'm a helper, not always 100% right! 🤓"
+        },
+        {
+          "type": "text",
+          "text": "How to check if information is true:\n📚 Look it up in a book or encyclopedia\n🧑‍🏫 Ask a teacher or parent\n🌐 Check a trusted website\n🤔 Ask yourself: 'Does this make sense?'"
+        },
+        {
+          "type": "mascot",
+          "text": "Being a good fact-checker is a superpower! Scientists, journalists, and doctors always double-check information. You can be a fact-checking superhero! 🦸‍♀️🔍"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "Can AI ever make mistakes?",
+          "options": ["No, AI is always right", "Yes, AI can sometimes be wrong", "Only older AI makes mistakes", "Only about math"],
+          "correct": 1
+        },
+        {
+          "question": "What is an AI 'hallucination'?",
+          "options": ["When AI draws pictures", "When AI makes up something that isn't true", "When AI is slow", "When AI sleeps"],
+          "correct": 1
+        },
+        {
+          "question": "If AI tells you a fact, you should...",
+          "options": ["Always believe it", "Always ignore it", "Check it with a trusted source", "Tell no one"],
+          "correct": 2
+        }
+      ]
+    },
+    {
+      "id": "lesson_9",
+      "title": "Creative Ideas",
+      "description": "Use AI to supercharge your imagination!",
+      "emoji": "💡",
+      "content": [
+        {
+          "type": "text",
+          "text": "AI is an amazing creativity partner! It can help you come up with ideas for drawings, inventions, games, stories, and so much more!"
+        },
+        {
+          "type": "mascot",
+          "text": "Stuck on what to draw? Ask AI: 'Give me 5 funny ideas for a drawing that a 6-year-old would love.' You'll have more ideas than paper! 🎨✏️"
+        },
+        {
+          "type": "text",
+          "text": "Creative things you can ask AI:\n🎮 'Invent a new game I can play with 2 friends'\n🏗️ 'Give me 5 ideas for a LEGO creation'\n🌈 'Help me plan a surprise for my grandma'\n🎭 'Think of 3 costumes I could make from cardboard'"
+        },
+        {
+          "type": "mascot",
+          "text": "Remember: AI gives you IDEAS, but YOU create the magic! AI is your brainstorming buddy. The best creations come from YOUR imagination and effort! 🌟"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "How can AI help with creativity?",
+          "options": ["It creates everything for you", "It gives you ideas and inspiration", "It replaces your imagination", "It only helps with math"],
+          "correct": 1
+        },
+        {
+          "question": "What should you do with creative ideas AI gives you?",
+          "options": ["Just read them and forget", "Copy them exactly", "Use them as starting points for YOUR creations", "Share them without adding anything"],
+          "correct": 2
+        },
+        {
+          "question": "AI is best described as a creativity...",
+          "options": ["Robot teacher", "Brainstorming buddy", "Magic wand that does everything", "Replacement for your brain"],
+          "correct": 1
+        }
+      ]
+    },
+    {
+      "id": "lesson_10",
+      "title": "Voice Commands",
+      "description": "Talk to AI with your voice!",
+      "emoji": "🎤",
+      "content": [
+        {
+          "type": "text",
+          "text": "Did you know you can TALK to AI? Voice assistants like Siri, Alexa, and Google Assistant are AI that listen to your voice and respond!"
+        },
+        {
+          "type": "mascot",
+          "text": "Speaking to AI works just like asking questions — the clearer you speak, the better AI understands! Speak slowly and clearly, like you're talking to a friend on the phone. 📞"
+        },
+        {
+          "type": "text",
+          "text": "Great voice commands:\n🎵 'Play a kids' song'\n🌤️ 'What's the weather today?'\n⏰ 'Set a timer for 5 minutes'\n📖 'Tell me a fun fact about penguins'\n🧮 'What is 12 times 4?'"
+        },
+        {
+          "type": "mascot",
+          "text": "Voice AI is great, but always use it with permission from your parents! Some questions are better asked to a real person. A voice assistant can't give you a hug! 🤗"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What are Siri, Alexa, and Google Assistant?",
+          "options": ["Video games", "Voice AI assistants", "Types of robots", "Social media apps"],
+          "correct": 1
+        },
+        {
+          "question": "How should you speak to a voice assistant?",
+          "options": ["Very fast", "Slowly and clearly", "In a whisper", "By shouting"],
+          "correct": 1
+        },
+        {
+          "question": "When using voice AI, you should...",
+          "options": ["Use it in secret", "Always have parent permission", "Ask it to do your chores", "Never use it"],
+          "correct": 1
+        }
+      ]
+    },
+    {
+      "id": "lesson_11",
+      "title": "Taking Useful Photos",
+      "description": "Discover how AI can understand your pictures!",
+      "emoji": "📷",
+      "content": [
+        {
+          "type": "text",
+          "text": "AI can look at photos and understand what's in them! This is called image recognition. You can use it to identify plants, animals, text, and much more!"
+        },
+        {
+          "type": "mascot",
+          "text": "Take a photo of a plant and AI can tell you what it is! Take a photo of a math problem and AI can help explain it. Photos become a powerful learning tool! 🌿📐"
+        },
+        {
+          "type": "text",
+          "text": "Tips for taking useful photos for AI:\n📸 Make sure the photo is clear and not blurry\n💡 Good lighting helps AI see better\n🎯 Focus on what you want AI to analyze\n📏 Get close enough so details are visible"
+        },
+        {
+          "type": "mascot",
+          "text": "Always ask a parent before taking photos and sharing them with AI apps. Some apps store your photos — always be careful what you photograph and share! 📱🛡️"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What is 'image recognition'?",
+          "options": ["Taking beautiful photos", "AI understanding what is in a picture", "Drawing pictures", "Printing photos"],
+          "correct": 1
+        },
+        {
+          "question": "Which photo will AI understand best?",
+          "options": ["A very blurry photo", "A dark photo", "A clear, well-lit photo", "A photo taken from far away"],
+          "correct": 2
+        },
+        {
+          "question": "Before sharing photos with AI apps, you should...",
+          "options": ["Share everything freely", "Ask a parent first", "Use any photo you find", "Take photos of strangers"],
+          "correct": 1
+        }
+      ]
+    },
+    {
+      "id": "lesson_12",
+      "title": "Final Mission!",
+      "description": "You're an AI expert now — prove it!",
+      "emoji": "🏆",
+      "content": [
+        {
+          "type": "text",
+          "text": "WOW! You've completed all 11 lessons! You are now an official AI Explorer! 🎉 Let's review everything you've learned on this amazing journey!"
+        },
+        {
+          "type": "mascot",
+          "text": "I'm SO proud of you! You learned what AI is, how to ask great questions, how to be creative, how to stay safe, and how to use AI wisely. You're amazing! 🤖⭐"
+        },
+        {
+          "type": "text",
+          "text": "Your AI Explorer Pledge:\n🤖 I will use AI to LEARN, not to cheat\n🛡️ I will stay SAFE and protect my information\n🔍 I will CHECK facts and not believe everything\n💡 I will use AI to boost my CREATIVITY\n👨‍👩‍👧 I will use AI with my FAMILY'S guidance"
+        },
+        {
+          "type": "mascot",
+          "text": "The future is bright, and you're going to help shape it! AI is a powerful tool, and with great power comes great responsibility. Go be an AI superhero! 🦸🌟🤖"
+        }
+      ],
+      "quiz": [
+        {
+          "question": "What is the most important rule when using AI?",
+          "options": ["Use it as much as possible", "Use it safely, wisely, and with family guidance", "Never tell anyone", "Use it only for games"],
+          "correct": 1
+        },
+        {
+          "question": "If AI gives you information, you should...",
+          "options": ["Always believe it", "Always ignore it", "Check it with trusted sources when important", "Only share it online"],
+          "correct": 2
+        },
+        {
+          "question": "You have now completed all lessons! You are an AI...",
+          "options": ["Robot", "Explorer and Expert!", "Teacher", "Computer"],
+          "correct": 1
+        }
+      ]
+    }
+  ]
+}
