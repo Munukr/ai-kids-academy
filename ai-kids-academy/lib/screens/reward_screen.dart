@@ -121,7 +121,7 @@ class _RewardScreenState extends State<RewardScreen>
                             style: GoogleFonts.nunito(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white80,
+                              color: Colors.white.withOpacity(0.8),
                             ),
                           ),
                           const SizedBox(height: 16),
