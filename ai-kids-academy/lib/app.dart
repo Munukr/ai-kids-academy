@@ -40,8 +40,8 @@ class AiKidsAcademyApp extends StatelessWidget {
         seedColor: AppColors.primary,
         brightness: Brightness.light,
       ),
-      textTheme: GoogleFonts.nunito(
-        textTheme: const TextTheme(
+      textTheme: GoogleFonts.nunitoTextTheme(
+        const TextTheme(
           displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
           displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
           headlineLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
@@ -67,7 +67,7 @@ class AiKidsAcademyApp extends StatelessWidget {
           elevation: 4,
         ),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: const CardTheme(
         elevation: 6,
         shadowColor: Colors.black26,
         shape: RoundedRectangleBorder(
