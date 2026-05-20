@@ -10,6 +10,7 @@ import '../providers/language_provider.dart';
 import '../providers/progress_provider.dart';
 import '../services/lesson_service.dart';
 import '../services/sound_service.dart';
+import '../utils/transitions.dart';
 import 'ai_lab_screen.dart';
 import 'lesson_screen.dart';
 import 'progress_screen.dart';
@@ -201,7 +202,7 @@ class _LessonMapScreenState extends State<LessonMapScreen>
           const SizedBox(width: 8),
           _IconBtn(
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const ProgressScreen()),
+              beepRoute(page: const ProgressScreen()),
             ),
             child: const Icon(Icons.bar_chart_rounded,
                 color: Colors.white, size: 20),
@@ -209,7 +210,7 @@ class _LessonMapScreenState extends State<LessonMapScreen>
           const SizedBox(width: 8),
           _IconBtn(
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const ParentInfoScreen()),
+              beepRoute(page: const ParentInfoScreen()),
             ),
             child: const Icon(Icons.family_restroom_rounded,
                 color: Colors.white, size: 20),
@@ -281,8 +282,8 @@ class _LessonMapScreenState extends State<LessonMapScreen>
                         ? () {
                             SoundService.instance.tap();
                             Navigator.of(context)
-                                .push(MaterialPageRoute(
-                                  builder: (_) => LessonScreen(
+                                .push(beepRoute(
+                                  page: LessonScreen(
                                     lesson: lessons[i],
                                     lessonIndex: i,
                                     totalLessons: lessons.length,
@@ -305,7 +306,7 @@ class _LessonMapScreenState extends State<LessonMapScreen>
                   onTap: () {
                     SoundService.instance.tap();
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const AiLabScreen()),
+                      beepRoute(page: const AiLabScreen()),
                     );
                   },
                 ),

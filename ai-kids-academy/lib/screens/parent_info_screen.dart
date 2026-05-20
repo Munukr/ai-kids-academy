@@ -127,7 +127,7 @@ class ParentInfoScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'v1.0.0',
+                  'v0.7 — Animated Beep · Visual AI Lab · Sounds',
                   style: GoogleFonts.nunito(
                     fontSize: 12,
                     color: AppColors.textSecondary,

@@ -7,6 +7,7 @@ import '../constants/app_strings.dart';
 import '../models/lesson.dart';
 import '../providers/language_provider.dart';
 import '../services/sound_service.dart';
+import '../utils/transitions.dart';
 import '../widgets/confetti_widget.dart';
 import '../widgets/mascot_widget.dart';
 import 'lesson_map_screen.dart';
@@ -176,8 +177,8 @@ class _RewardScreenState extends State<RewardScreen>
                                     onTap: () {
                                       SoundService.instance.tap();
                                       Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (_) => LessonScreen(
+                                        beepRoute(
+                                          page: LessonScreen(
                                             lesson: widget.allLessons[
                                                 widget.lessonIndex + 1],
                                             lessonIndex:
@@ -198,9 +199,7 @@ class _RewardScreenState extends State<RewardScreen>
                                   onTap: () {
                                     SoundService.instance.tap();
                                     Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              const LessonMapScreen()),
+                                      beepRoute(page: const LessonMapScreen()),
                                       (r) => false,
                                     );
                                   },

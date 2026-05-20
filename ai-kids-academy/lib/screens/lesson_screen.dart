@@ -6,6 +6,7 @@ import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import '../models/lesson.dart';
 import '../providers/language_provider.dart';
+import '../utils/transitions.dart';
 import '../widgets/mascot_widget.dart';
 import 'quiz_screen.dart';
 
@@ -180,8 +181,8 @@ class _LessonScreenState extends State<LessonScreen>
             onTap: () {
               if (isLast) {
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (_) => QuizScreen(
+                  beepRoute(
+                    page: QuizScreen(
                       lesson: widget.lesson,
                       lessonIndex: widget.lessonIndex,
                       totalLessons: widget.totalLessons,
@@ -289,7 +290,11 @@ class _MascotBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MascotWidget(name: mascotName, size: 100),
+        MascotWidget(
+          name: mascotName,
+          size: 100,
+          emotion: MascotEmotion.happy,
+        ),
         const SizedBox(height: 16),
         Container(
           width: double.infinity,

@@ -7,6 +7,7 @@ import '../constants/app_strings.dart';
 import '../models/lesson.dart';
 import '../providers/language_provider.dart';
 import '../providers/progress_provider.dart';
+import '../utils/transitions.dart';
 import '../widgets/mascot_widget.dart';
 import 'reward_screen.dart';
 
@@ -33,6 +34,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   int? _selectedOption;
   bool _answered = false;
   int _correctCount = 0;
+  MascotEmotion _mascotEmotion = MascotEmotion.thinking;
   late final AnimationController _feedbackCtrl;
 
   @override
@@ -57,6 +59,8 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
       _selectedOption = index;
       _answered = true;
       if (isCorrect) _correctCount++;
+      _mascotEmotion =
+          isCorrect ? MascotEmotion.happy : MascotEmotion.confused;
     });
     _feedbackCtrl.forward(from: 0);
   }
@@ -68,6 +72,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
         _currentQuestion++;
         _selectedOption = null;
         _answered = false;
+        _mascotEmotion = MascotEmotion.thinking;
       });
       _feedbackCtrl.reverse();
     } else {
@@ -81,8 +86,8 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
 
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => RewardScreen(
+      beepRoute(
+        page: RewardScreen(
           lesson: widget.lesson,
           lessonIndex: widget.lessonIndex,
           totalLessons: widget.totalLessons,
@@ -207,7 +212,11 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
       ),
       child: Column(
         children: [
-          Text('🤖', style: const TextStyle(fontSize: 40)),
+          MascotWidget(
+            name: mascotName,
+            size: 76,
+            emotion: _mascotEmotion,
+          ),
           const SizedBox(height: 12),
           Text(
             q.question,

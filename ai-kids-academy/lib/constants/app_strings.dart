@@ -530,4 +530,26 @@ Progress is saved on the device.''';
         return 'Sound Off';
     }
   }
+
+  static String createAgain(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Создать ещё!';
+      case AppLanguage.he:
+        return '!צור שוב';
+      case AppLanguage.en:
+        return 'Create Again!';
+    }
+  }
+
+  static String scenesCreated(int n, AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Создано картин: $n 🎨';
+      case AppLanguage.he:
+        return 'יצרת $n תמונות! 🎨';
+      case AppLanguage.en:
+        return n == 1 ? 'You created 1 scene! 🎨' : 'You created $n scenes! 🎨';
+    }
+  }
 }
