@@ -83,11 +83,11 @@ class AppStrings {
   static String lessonMap(AppLanguage lang) {
     switch (lang) {
       case AppLanguage.ru:
-        return 'Карта уроков';
+        return 'AI Kids Academy';
       case AppLanguage.he:
-        return 'מפת שיעורים';
+        return 'AI Kids Academy';
       case AppLanguage.en:
-        return 'Lesson Map';
+        return 'AI Kids Academy';
     }
   }
 
@@ -374,11 +374,11 @@ Progress is saved on the device.''';
   static String mascotEncouragement(AppLanguage lang) {
     switch (lang) {
       case AppLanguage.ru:
-        return 'Ты справишься! Я верю в тебя! 🤖';
+        return 'Ты справишься! Я верю в тебя!';
       case AppLanguage.he:
-        return '!אתה יכול לעשות את זה! אני מאמין בך 🤖';
+        return '!אתה יכול לעשות את זה! אני מאמין בך';
       case AppLanguage.en:
-        return 'You can do it! I believe in you! 🤖';
+        return 'You can do it! I believe in you!';
     }
   }
 
@@ -390,6 +390,144 @@ Progress is saved on the device.''';
         return 'שנה שפה';
       case AppLanguage.en:
         return 'Change Language';
+    }
+  }
+
+  // ── AI Lab ──────────────────────────────────────────────────────────────────
+
+  static String aiLab(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Лаборатория Бипа';
+      case AppLanguage.he:
+        return 'מעבדת ביפ';
+      case AppLanguage.en:
+        return 'Beep\'s AI Lab';
+    }
+  }
+
+  static String aiLabSubtitle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Создай волшебную сцену!';
+      case AppLanguage.he:
+        return '!צור סצנה קסומה';
+      case AppLanguage.en:
+        return 'Create a magical scene!';
+    }
+  }
+
+  static String chooseCharacter(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Выбери персонажа!';
+      case AppLanguage.he:
+        return '!בחר דמות';
+      case AppLanguage.en:
+        return 'Choose a character!';
+    }
+  }
+
+  static String chooseStyle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Выбери стиль!';
+      case AppLanguage.he:
+        return '!בחר סגנון';
+      case AppLanguage.en:
+        return 'Choose a style!';
+    }
+  }
+
+  static String chooseLocation(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Выбери место!';
+      case AppLanguage.he:
+        return '!בחר מקום';
+      case AppLanguage.en:
+        return 'Choose a place!';
+    }
+  }
+
+  static String chooseAction(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Выбери действие!';
+      case AppLanguage.he:
+        return '!בחר פעולה';
+      case AppLanguage.en:
+        return 'Choose an action!';
+    }
+  }
+
+  static String yourMagicScene(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return '✨ Твоя сцена! ✨';
+      case AppLanguage.he:
+        return '✨ הסצנה שלך! ✨';
+      case AppLanguage.en:
+        return '✨ Your Magic Scene! ✨';
+    }
+  }
+
+  static String makeAnother(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Ещё одну!';
+      case AppLanguage.he:
+        return '!עוד אחד';
+      case AppLanguage.en:
+        return 'Make Another!';
+    }
+  }
+
+  static String beepProud(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Бип в восторге!';
+      case AppLanguage.he:
+        return '!ביפ כל כך נרגש';
+      case AppLanguage.en:
+        return 'Beep is so excited!';
+    }
+  }
+
+  // ── Reward ──────────────────────────────────────────────────────────────────
+
+  static String beepSays(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Бип говорит:';
+      case AppLanguage.he:
+        return ':ביפ אומר';
+      case AppLanguage.en:
+        return 'Beep says:';
+    }
+  }
+
+  // ── Sound ───────────────────────────────────────────────────────────────────
+
+  static String soundOn(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Звук вкл.';
+      case AppLanguage.he:
+        return 'קול פועל';
+      case AppLanguage.en:
+        return 'Sound On';
+    }
+  }
+
+  static String soundOff(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Звук выкл.';
+      case AppLanguage.he:
+        return 'קול כבוי';
+      case AppLanguage.en:
+        return 'Sound Off';
     }
   }
 }
