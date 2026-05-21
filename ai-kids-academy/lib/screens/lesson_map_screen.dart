@@ -15,6 +15,7 @@ import 'ai_lab_screen.dart';
 import 'lesson_screen.dart';
 import 'progress_screen.dart';
 import 'parent_info_screen.dart';
+import 'settings_screen.dart';
 
 // ── File-level constants ──────────────────────────────────────────────────────
 
@@ -188,6 +189,14 @@ class _LessonMapScreenState extends State<LessonMapScreen>
             ],
           ),
           const Spacer(),
+          _IconBtn(
+            onTap: () => Navigator.of(context).push(
+              beepRoute(page: const SettingsScreen()),
+            ),
+            child: const Icon(Icons.settings_rounded,
+                color: Colors.white, size: 20),
+          ),
+          const SizedBox(width: 8),
           _IconBtn(
             onTap: () async {
               await SoundService.instance.toggleMute();

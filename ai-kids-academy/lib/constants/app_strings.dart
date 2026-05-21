@@ -135,6 +135,193 @@ class AppStrings {
     }
   }
 
+  static String correctPlayful(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return '🌟 Молодец! Всё верно!';
+      case AppLanguage.he:
+        return '!🌟 מדהים! נכון בדיוק';
+      case AppLanguage.en:
+        return '🌟 Amazing! You got it!';
+    }
+  }
+
+  static String wrongPlayful(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Упс! Давай попробуем ещё! 💪';
+      case AppLanguage.he:
+        return '!אופס! בואו ננסה שוב 💪';
+      case AppLanguage.en:
+        return 'Oops! Let\'s try again! 💪';
+    }
+  }
+
+  static String quizPlayful(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Помоги Бипу! 🤖';
+      case AppLanguage.he:
+        return '!עזור לביפ 🤖';
+      case AppLanguage.en:
+        return 'Help Beep! 🤖';
+    }
+  }
+
+  static String readyForQuiz(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Я готов! 🎯';
+      case AppLanguage.he:
+        return '!אני מוכן 🎯';
+      case AppLanguage.en:
+        return 'I\'m Ready! 🎯';
+    }
+  }
+
+  static String nextQuestion(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Следующий вопрос! →';
+      case AppLanguage.he:
+        return '!שאלה הבאה →';
+      case AppLanguage.en:
+        return 'Next Question! →';
+    }
+  }
+
+  static String seeMyStars(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Смотреть мои звёзды! ⭐';
+      case AppLanguage.he:
+        return '!לראות את הכוכבים שלי ⭐';
+      case AppLanguage.en:
+        return 'See My Stars! ⭐';
+    }
+  }
+
+  static String settingsTitle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Настройки';
+      case AppLanguage.he:
+        return 'הגדרות';
+      case AppLanguage.en:
+        return 'Settings';
+    }
+  }
+
+  static String soundEffectsLabel(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Звуковые эффекты';
+      case AppLanguage.he:
+        return 'אפקטים קוליים';
+      case AppLanguage.en:
+        return 'Sound Effects';
+    }
+  }
+
+  static String voiceNarrationLabel(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Голосовое озвучивание';
+      case AppLanguage.he:
+        return 'קריינות קולית';
+      case AppLanguage.en:
+        return 'Voice Narration';
+    }
+  }
+
+  static String autoReadLabel(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Читать автоматически';
+      case AppLanguage.he:
+        return 'קריאה אוטומטית';
+      case AppLanguage.en:
+        return 'Auto-Read Pages';
+    }
+  }
+
+  static String narrationHintText(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Для озвучивания нужен синтезатор речи на устройстве. Доступность зависит от версии Android.';
+      case AppLanguage.he:
+        return 'הקריינות מצריכה מנוע טקסט-לדיבור במכשיר. הזמינות תלויה בגרסת אנדרואיד.';
+      case AppLanguage.en:
+        return 'Narration requires a text-to-speech engine on the device. Availability depends on Android version.';
+    }
+  }
+
+  static String wasFunTitle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Было весело?';
+      case AppLanguage.he:
+        return 'היה כיף?';
+      case AppLanguage.en:
+        return 'Was this fun?';
+    }
+  }
+
+  static String feedbackFun(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Весело!';
+      case AppLanguage.he:
+        return '!כיף';
+      case AppLanguage.en:
+        return 'Fun!';
+    }
+  }
+
+  static String feedbackOkay(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Нормально';
+      case AppLanguage.he:
+        return 'בסדר';
+      case AppLanguage.en:
+        return 'Okay';
+    }
+  }
+
+  static String feedbackBoring(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Скучно';
+      case AppLanguage.he:
+        return 'משעמם';
+      case AppLanguage.en:
+        return 'Boring';
+    }
+  }
+
+  static String feedbackThanks(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Спасибо! 🎉 Ты молодец!';
+      case AppLanguage.he:
+        return '!תודה 🎉 כל הכבוד';
+      case AppLanguage.en:
+        return 'Thanks! 🎉 You\'re awesome!';
+    }
+  }
+
+  static String feedbackStatsTitle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Что думают дети';
+      case AppLanguage.he:
+        return 'מה ילדים חושבים';
+      case AppLanguage.en:
+        return 'How Kids Feel';
+    }
+  }
+
   static String nextLesson(AppLanguage lang) {
     switch (lang) {
       case AppLanguage.ru:

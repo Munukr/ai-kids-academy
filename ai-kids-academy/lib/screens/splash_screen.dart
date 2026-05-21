@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/language_provider.dart';
+import '../services/narration_service.dart';
 import '../services/sound_service.dart';
 import '../widgets/mascot_widget.dart';
 import 'language_selection_screen.dart';
@@ -43,6 +44,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> _startSequence() async {
     await SoundService.instance.init();
+    await NarrationService.instance.init();
     await Future.delayed(const Duration(milliseconds: 200));
     _enterCtrl.forward();
     await Future.delayed(const Duration(milliseconds: 400));

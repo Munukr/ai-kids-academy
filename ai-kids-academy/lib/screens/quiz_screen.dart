@@ -7,8 +7,11 @@ import '../constants/app_strings.dart';
 import '../models/lesson.dart';
 import '../providers/language_provider.dart';
 import '../providers/progress_provider.dart';
+import '../services/narration_service.dart';
+import '../services/sound_service.dart';
 import '../utils/transitions.dart';
 import '../widgets/mascot_widget.dart';
+import '../widgets/speaker_button.dart';
 import 'reward_screen.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -35,19 +38,34 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   bool _answered = false;
   int _correctCount = 0;
   MascotEmotion _mascotEmotion = MascotEmotion.thinking;
+  AppLanguage _lang = AppLanguage.en;
+
   late final AnimationController _feedbackCtrl;
+  late final AnimationController _questionCtrl;
 
   @override
   void initState() {
     super.initState();
     _feedbackCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 400));
+        vsync: this, duration: const Duration(milliseconds: 450));
+    _questionCtrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 350));
+    _questionCtrl.forward();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _narrate(widget.lesson.quiz[0].question);
+    });
   }
 
   @override
   void dispose() {
+    NarrationService.instance.stop();
     _feedbackCtrl.dispose();
+    _questionCtrl.dispose();
     super.dispose();
+  }
+
+  void _narrate(String text) {
+    NarrationService.instance.speakAuto(text, _lang);
   }
 
   void _selectOption(int index) {
@@ -60,14 +78,23 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
       _answered = true;
       if (isCorrect) _correctCount++;
       _mascotEmotion =
-          isCorrect ? MascotEmotion.happy : MascotEmotion.confused;
+          isCorrect ? MascotEmotion.celebrating : MascotEmotion.confused;
     });
     _feedbackCtrl.forward(from: 0);
+
+    if (isCorrect) {
+      SoundService.instance.success();
+      NarrationService.instance.speak(AppStrings.correctPlayful(_lang), _lang);
+    } else {
+      SoundService.instance.wrong();
+      NarrationService.instance.speak(AppStrings.wrongPlayful(_lang), _lang);
+    }
   }
 
   void _nextQuestion() {
     final hasMore = _currentQuestion < widget.lesson.quiz.length - 1;
     if (hasMore) {
+      _questionCtrl.reset();
       setState(() {
         _currentQuestion++;
         _selectedOption = null;
@@ -75,12 +102,17 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
         _mascotEmotion = MascotEmotion.thinking;
       });
       _feedbackCtrl.reverse();
+      _questionCtrl.forward();
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _narrate(widget.lesson.quiz[_currentQuestion].question);
+      });
     } else {
       _finishQuiz();
     }
   }
 
   Future<void> _finishQuiz() async {
+    NarrationService.instance.stop();
     final progress = context.read<ProgressProvider>();
     await progress.markCompleted(widget.lesson.id);
 
@@ -103,9 +135,11 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final lang = context.watch<LanguageProvider>();
     final l = lang.language;
+    _lang = l;
     final isRtl = lang.isRtl;
     final q = widget.lesson.quiz[_currentQuestion];
-    final gradients = AppColors.gradients[widget.lessonIndex % AppColors.gradients.length];
+    final gradients =
+        AppColors.gradients[widget.lessonIndex % AppColors.gradients.length];
 
     return Directionality(
       textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
@@ -126,8 +160,11 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                   const SizedBox(height: 16),
                   _buildHeader(l),
                   const SizedBox(height: 24),
-                  _buildQuestionCard(q, l, lang.mascotName),
-                  const SizedBox(height: 20),
+                  FadeTransition(
+                    opacity: _questionCtrl,
+                    child: _buildQuestionCard(q, l, lang.mascotName),
+                  ),
+                  const SizedBox(height: 16),
                   Expanded(child: _buildOptions(q, l)),
                   if (_answered) _buildNextButton(l),
                   const SizedBox(height: 20),
@@ -145,12 +182,15 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
     return Row(
       children: [
         GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
+          onTap: () {
+            NarrationService.instance.stop();
+            Navigator.of(context).pop();
+          },
           child: Container(
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: Colors.white.withAlpha(50),
+              color: Colors.white.withOpacity(0.18),
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Icon(Icons.close_rounded, color: Colors.white),
@@ -162,7 +202,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppStrings.quiz(l),
+                AppStrings.quizPlayful(l),
                 style: GoogleFonts.nunito(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
@@ -183,7 +223,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color: Colors.white.withAlpha(50),
+            color: Colors.white.withOpacity(0.2),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Text(
@@ -199,10 +239,11 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildQuestionCard(QuizQuestion q, AppLanguage l, String mascotName) {
+  Widget _buildQuestionCard(
+      QuizQuestion q, AppLanguage l, String mascotName) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(28),
@@ -228,35 +269,46 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
               height: 1.5,
             ),
           ),
+          const SizedBox(height: 12),
+          SpeakerButton(text: q.question, lang: l, size: 44),
           if (_answered) ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             FadeTransition(
               opacity: _feedbackCtrl,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: _selectedOption == q.correct
-                      ? AppColors.success.withAlpha(30)
-                      : AppColors.error.withAlpha(30),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Text(
-                  _selectedOption == q.correct
-                      ? AppStrings.correct(l)
-                      : AppStrings.wrong(l),
-                  style: GoogleFonts.nunito(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: _selectedOption == q.correct
-                        ? AppColors.success
-                        : AppColors.error,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+              child: _buildFeedbackBubble(q, l),
             ),
           ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildFeedbackBubble(QuizQuestion q, AppLanguage l) {
+    final isCorrect = _selectedOption == q.correct;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+      decoration: BoxDecoration(
+        color: isCorrect
+            ? AppColors.success.withOpacity(0.12)
+            : AppColors.error.withOpacity(0.10),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isCorrect
+              ? AppColors.success.withOpacity(0.4)
+              : AppColors.error.withOpacity(0.3),
+          width: 1.5,
+        ),
+      ),
+      child: Text(
+        isCorrect
+            ? AppStrings.correctPlayful(l)
+            : AppStrings.wrongPlayful(l),
+        style: GoogleFonts.nunito(
+          fontSize: 16,
+          fontWeight: FontWeight.w800,
+          color: isCorrect ? AppColors.success : AppColors.error,
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -272,23 +324,26 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
 
         if (_answered) {
           if (i == q.correct) {
-            bgColor = AppColors.success.withAlpha(30);
+            bgColor = AppColors.success.withOpacity(0.12);
             borderColor = AppColors.success;
             textColor = AppColors.success;
             icon = Icons.check_circle_rounded;
           } else if (i == _selectedOption) {
-            bgColor = AppColors.error.withAlpha(20);
+            bgColor = AppColors.error.withOpacity(0.10);
             borderColor = AppColors.error;
             textColor = AppColors.error;
             icon = Icons.cancel_rounded;
           }
         } else if (_selectedOption == i) {
-          bgColor = AppColors.primary.withAlpha(20);
+          bgColor = AppColors.primary.withOpacity(0.10);
           borderColor = AppColors.primary;
         }
 
         return GestureDetector(
-          onTap: () => _selectOption(i),
+          onTap: () {
+            SoundService.instance.tap();
+            _selectOption(i);
+          },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 250),
             margin: const EdgeInsets.only(bottom: 12),
@@ -299,7 +354,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
               border: Border.all(color: borderColor, width: 2),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withAlpha(15),
+                  color: Colors.black.withOpacity(0.08),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),
@@ -308,10 +363,12 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
             child: Row(
               children: [
                 Container(
-                  width: 32,
-                  height: 32,
+                  width: 34,
+                  height: 34,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withAlpha(20),
+                    color: _answered && i == q.correct
+                        ? AppColors.success.withOpacity(0.15)
+                        : AppColors.primary.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -320,7 +377,9 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
                       style: GoogleFonts.nunito(
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
-                        color: AppColors.primary,
+                        color: _answered && i == q.correct
+                            ? AppColors.success
+                            : AppColors.primary,
                       ),
                     ),
                   ),
@@ -358,7 +417,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withAlpha(30),
+              color: Colors.black.withOpacity(0.18),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -366,7 +425,9 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
         ),
         child: Center(
           child: Text(
-            isLast ? AppStrings.finishQuiz(l) : AppStrings.continueLesson(l),
+            isLast
+                ? AppStrings.seeMyStars(l)
+                : AppStrings.nextQuestion(l),
             style: GoogleFonts.nunito(
               fontSize: 18,
               fontWeight: FontWeight.w900,

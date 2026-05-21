@@ -6,8 +6,10 @@ import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import '../models/lesson.dart';
 import '../providers/language_provider.dart';
+import '../services/narration_service.dart';
 import '../utils/transitions.dart';
 import '../widgets/mascot_widget.dart';
+import '../widgets/speaker_button.dart';
 import 'quiz_screen.dart';
 
 class LessonScreen extends StatefulWidget {
@@ -33,6 +35,7 @@ class _LessonScreenState extends State<LessonScreen>
   late final PageController _pageController;
   int _currentPage = 0;
   late final AnimationController _headerCtrl;
+  AppLanguage _lang = AppLanguage.en;
 
   @override
   void initState() {
@@ -41,21 +44,34 @@ class _LessonScreenState extends State<LessonScreen>
     _headerCtrl = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
     _headerCtrl.forward();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _autoNarratePage(0);
+    });
   }
 
   @override
   void dispose() {
+    NarrationService.instance.stop();
     _pageController.dispose();
     _headerCtrl.dispose();
     super.dispose();
+  }
+
+  void _autoNarratePage(int pageIndex) {
+    final blocks = widget.lesson.content;
+    if (pageIndex < blocks.length) {
+      NarrationService.instance.speakAuto(blocks[pageIndex].text, _lang);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final lang = context.watch<LanguageProvider>();
     final l = lang.language;
+    _lang = l;
     final isRtl = lang.isRtl;
-    final colors = AppColors.gradients[widget.lessonIndex % AppColors.gradients.length];
+    final colors =
+        AppColors.gradients[widget.lessonIndex % AppColors.gradients.length];
 
     return Directionality(
       textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
@@ -84,7 +100,8 @@ class _LessonScreenState extends State<LessonScreen>
     );
   }
 
-  Widget _buildHeader(BuildContext context, AppLanguage l, List<Color> colors) {
+  Widget _buildHeader(
+      BuildContext context, AppLanguage l, List<Color> colors) {
     return FadeTransition(
       opacity: _headerCtrl,
       child: Padding(
@@ -92,12 +109,15 @@ class _LessonScreenState extends State<LessonScreen>
         child: Row(
           children: [
             GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
+              onTap: () {
+                NarrationService.instance.stop();
+                Navigator.of(context).pop();
+              },
               child: Container(
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(50),
+                  color: Colors.white.withOpacity(0.18),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Icon(Icons.arrow_back_rounded,
@@ -143,7 +163,10 @@ class _LessonScreenState extends State<LessonScreen>
     return PageView.builder(
       controller: _pageController,
       physics: const NeverScrollableScrollPhysics(),
-      onPageChanged: (i) => setState(() => _currentPage = i),
+      onPageChanged: (i) {
+        setState(() => _currentPage = i);
+        _autoNarratePage(i);
+      },
       itemCount: blocks.length,
       itemBuilder: (context, index) {
         final block = blocks[index];
@@ -160,8 +183,9 @@ class _LessonScreenState extends State<LessonScreen>
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: block.type == 'mascot'
-                ? _MascotBlock(mascotName: mascotName, text: block.text)
-                : _TextBlock(text: block.text),
+                ? _MascotBlock(
+                    mascotName: mascotName, text: block.text, lang: l)
+                : _TextBlock(text: block.text, lang: l),
           ),
         );
       },
@@ -180,6 +204,7 @@ class _LessonScreenState extends State<LessonScreen>
           GestureDetector(
             onTap: () {
               if (isLast) {
+                NarrationService.instance.stop();
                 Navigator.of(context).pushReplacement(
                   beepRoute(
                     page: QuizScreen(
@@ -205,21 +230,34 @@ class _LessonScreenState extends State<LessonScreen>
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withAlpha(30),
+                    color: Colors.black.withOpacity(0.15),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
                 ],
               ),
-              child: Center(
-                child: Text(
-                  isLast ? AppStrings.quiz(l) : AppStrings.continueLesson(l),
-                  style: GoogleFonts.nunito(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primary,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    isLast
+                        ? AppStrings.readyForQuiz(l)
+                        : AppStrings.continueLesson(l),
+                    style: GoogleFonts.nunito(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.primary,
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    isLast
+                        ? Icons.emoji_events_rounded
+                        : Icons.arrow_forward_rounded,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
+                ],
               ),
             ),
           ),
@@ -241,7 +279,7 @@ class _LessonScreenState extends State<LessonScreen>
           decoration: BoxDecoration(
             color: i == _currentPage
                 ? Colors.white
-                : Colors.white.withAlpha(100),
+                : Colors.white.withOpacity(0.4),
             borderRadius: BorderRadius.circular(4),
           ),
         );
@@ -252,7 +290,8 @@ class _LessonScreenState extends State<LessonScreen>
 
 class _TextBlock extends StatelessWidget {
   final String text;
-  const _TextBlock({required this.text});
+  final AppLanguage lang;
+  const _TextBlock({required this.text, required this.lang});
 
   @override
   Widget build(BuildContext context) {
@@ -266,15 +305,21 @@ class _TextBlock extends StatelessWidget {
           BoxShadow(color: Colors.black12, blurRadius: 16, offset: Offset(0, 6)),
         ],
       ),
-      child: Text(
-        text,
-        style: GoogleFonts.nunito(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
-          height: 1.6,
-        ),
-        textAlign: TextAlign.center,
+      child: Column(
+        children: [
+          Text(
+            text,
+            style: GoogleFonts.nunito(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+              height: 1.6,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          SpeakerButton(text: text, lang: lang, size: 48),
+        ],
       ),
     );
   }
@@ -283,8 +328,13 @@ class _TextBlock extends StatelessWidget {
 class _MascotBlock extends StatelessWidget {
   final String mascotName;
   final String text;
+  final AppLanguage lang;
 
-  const _MascotBlock({required this.mascotName, required this.text});
+  const _MascotBlock({
+    required this.mascotName,
+    required this.text,
+    required this.lang,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -302,20 +352,32 @@ class _MascotBlock extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(28),
-            border: Border.all(color: AppColors.primary.withAlpha(80), width: 2),
+            border:
+                Border.all(color: AppColors.primary.withOpacity(0.3), width: 2),
             boxShadow: const [
-              BoxShadow(color: Colors.black12, blurRadius: 16, offset: Offset(0, 6)),
+              BoxShadow(
+                  color: Colors.black12, blurRadius: 16, offset: Offset(0, 6)),
             ],
           ),
-          child: Text(
-            text,
-            style: GoogleFonts.nunito(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
-              height: 1.6,
-            ),
-            textAlign: TextAlign.center,
+          child: Column(
+            children: [
+              Text(
+                text,
+                style: GoogleFonts.nunito(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
+                  height: 1.6,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 14),
+              SpeakerButton(
+                  text: text,
+                  lang: lang,
+                  size: 48,
+                  color: const Color(0xFF9C59D1)),
+            ],
           ),
         ),
       ],

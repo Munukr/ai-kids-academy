@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import '../models/lesson.dart';
 import '../providers/language_provider.dart';
+import '../services/narration_service.dart';
 import '../services/sound_service.dart';
 import '../utils/transitions.dart';
 import '../widgets/confetti_widget.dart';
@@ -39,6 +43,7 @@ class _RewardScreenState extends State<RewardScreen>
     with TickerProviderStateMixin {
   late final AnimationController _starCtrl;
   late final AnimationController _contentCtrl;
+  String? _feedbackGiven;
 
   @override
   void initState() {
@@ -55,15 +60,38 @@ class _RewardScreenState extends State<RewardScreen>
       }
     });
     Future.delayed(const Duration(milliseconds: 550), () {
-      if (mounted) _contentCtrl.forward();
+      if (mounted) {
+        _contentCtrl.forward();
+      }
+    });
+    Future.delayed(const Duration(milliseconds: 700), () {
+      if (mounted) {
+        final lang =
+            context.read<LanguageProvider>().language;
+        NarrationService.instance
+            .speakAuto(AppStrings.beepProud(lang), lang);
+      }
     });
   }
 
   @override
   void dispose() {
+    NarrationService.instance.stop();
     _starCtrl.dispose();
     _contentCtrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _recordFeedback(String key) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      const storageKey = 'feedback_counts';
+      final raw = prefs.getString(storageKey) ?? '{}';
+      final map = Map<String, dynamic>.from(jsonDecode(raw));
+      map[key] = (map[key] as int? ?? 0) + 1;
+      await prefs.setString(storageKey, jsonEncode(map));
+    } catch (_) {}
+    if (mounted) setState(() => _feedbackGiven = key);
   }
 
   @override
@@ -90,11 +118,10 @@ class _RewardScreenState extends State<RewardScreen>
               ),
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
                       const SizedBox(height: 16),
-                      // Mascot with excited emotion
                       ScaleTransition(
                         scale: CurvedAnimation(
                             parent: _starCtrl, curve: Curves.elasticOut),
@@ -105,8 +132,7 @@ class _RewardScreenState extends State<RewardScreen>
                           message: AppStrings.beepProud(l),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      // Star reward
+                      const SizedBox(height: 16),
                       ScaleTransition(
                         scale: CurvedAnimation(
                             parent: _starCtrl, curve: Curves.elasticOut),
@@ -115,7 +141,7 @@ class _RewardScreenState extends State<RewardScreen>
                           total: widget.totalQuestions,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 14),
                       Expanded(
                         child: FadeTransition(
                           opacity: CurvedAnimation(
@@ -127,85 +153,81 @@ class _RewardScreenState extends State<RewardScreen>
                                 .animate(CurvedAnimation(
                                     parent: _contentCtrl,
                                     curve: Curves.easeOut)),
-                            child: Column(
-                              children: [
-                                Text(
-                                  AppStrings.rewardTitle(l),
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.nunito(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  AppStrings.rewardSubtitle(l),
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.nunito(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white.withOpacity(0.82),
-                                  ),
-                                ),
-                                const SizedBox(height: 14),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                        color: Colors.white.withOpacity(0.35),
-                                        width: 1.5),
-                                  ),
-                                  child: Text(
-                                    AppStrings.score(widget.correctAnswers,
-                                        widget.totalQuestions, l),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    AppStrings.rewardTitle(l),
+                                    textAlign: TextAlign.center,
                                     style: GoogleFonts.nunito(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w900,
                                       color: Colors.white,
                                     ),
                                   ),
-                                ),
-                                const Spacer(),
-                                if (hasNext) ...[
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.18),
+                                      borderRadius: BorderRadius.circular(18),
+                                      border: Border.all(
+                                          color:
+                                              Colors.white.withOpacity(0.32),
+                                          width: 1.5),
+                                    ),
+                                    child: Text(
+                                      AppStrings.score(widget.correctAnswers,
+                                          widget.totalQuestions, l),
+                                      style: GoogleFonts.nunito(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  _buildFeedbackSection(l),
+                                  const SizedBox(height: 20),
+                                  if (hasNext) ...[
+                                    _ActionButton(
+                                      label: AppStrings.nextLesson(l),
+                                      icon: Icons.arrow_forward_rounded,
+                                      onTap: () {
+                                        SoundService.instance.tap();
+                                        Navigator.of(context).pushReplacement(
+                                          beepRoute(
+                                            page: LessonScreen(
+                                              lesson: widget.allLessons[
+                                                  widget.lessonIndex + 1],
+                                              lessonIndex:
+                                                  widget.lessonIndex + 1,
+                                              totalLessons: widget.totalLessons,
+                                              allLessons: widget.allLessons,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(height: 12),
+                                  ],
                                   _ActionButton(
-                                    label: AppStrings.nextLesson(l),
-                                    icon: Icons.arrow_forward_rounded,
+                                    label: AppStrings.backToMap(l),
+                                    icon: Icons.map_rounded,
+                                    outlined: true,
                                     onTap: () {
                                       SoundService.instance.tap();
-                                      Navigator.of(context).pushReplacement(
+                                      Navigator.of(context).pushAndRemoveUntil(
                                         beepRoute(
-                                          page: LessonScreen(
-                                            lesson: widget.allLessons[
-                                                widget.lessonIndex + 1],
-                                            lessonIndex:
-                                                widget.lessonIndex + 1,
-                                            totalLessons: widget.totalLessons,
-                                            allLessons: widget.allLessons,
-                                          ),
-                                        ),
+                                            page: const LessonMapScreen()),
+                                        (r) => false,
                                       );
                                     },
                                   ),
-                                  const SizedBox(height: 12),
+                                  const SizedBox(height: 24),
                                 ],
-                                _ActionButton(
-                                  label: AppStrings.backToMap(l),
-                                  icon: Icons.map_rounded,
-                                  outlined: true,
-                                  onTap: () {
-                                    SoundService.instance.tap();
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                      beepRoute(page: const LessonMapScreen()),
-                                      (r) => false,
-                                    );
-                                  },
-                                ),
-                                const SizedBox(height: 24),
-                              ],
+                              ),
                             ),
                           ),
                         ),
@@ -215,8 +237,151 @@ class _RewardScreenState extends State<RewardScreen>
                 ),
               ),
             ),
-            // Confetti on top
             const ConfettiOverlay(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeedbackSection(AppLanguage l) {
+    if (_feedbackGiven != null) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(20),
+          border:
+              Border.all(color: Colors.white.withOpacity(0.35), width: 1.5),
+        ),
+        child: Text(
+          AppStrings.feedbackThanks(l),
+          style: GoogleFonts.nunito(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.18),
+        borderRadius: BorderRadius.circular(22),
+        border:
+            Border.all(color: Colors.white.withOpacity(0.35), width: 1.5),
+      ),
+      child: Column(
+        children: [
+          Text(
+            AppStrings.wasFunTitle(l),
+            style: GoogleFonts.nunito(
+              fontSize: 17,
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _FeedbackBtn(
+                emoji: '😄',
+                label: AppStrings.feedbackFun(l),
+                onTap: () => _recordFeedback('fun'),
+              ),
+              _FeedbackBtn(
+                emoji: '😐',
+                label: AppStrings.feedbackOkay(l),
+                onTap: () => _recordFeedback('okay'),
+              ),
+              _FeedbackBtn(
+                emoji: '😴',
+                label: AppStrings.feedbackBoring(l),
+                onTap: () => _recordFeedback('boring'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FeedbackBtn extends StatefulWidget {
+  final String emoji;
+  final String label;
+  final VoidCallback onTap;
+
+  const _FeedbackBtn({
+    required this.emoji,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  State<_FeedbackBtn> createState() => _FeedbackBtnState();
+}
+
+class _FeedbackBtnState extends State<_FeedbackBtn>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 120));
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => _ctrl.forward(),
+      onTapUp: (_) {
+        _ctrl.reverse();
+        SoundService.instance.tap();
+        widget.onTap();
+      },
+      onTapCancel: () => _ctrl.reverse(),
+      child: AnimatedBuilder(
+        animation: _ctrl,
+        builder: (_, child) =>
+            Transform.scale(scale: 1.0 - _ctrl.value * 0.15, child: child),
+        child: Column(
+          children: [
+            Container(
+              width: 62,
+              height: 62,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.25),
+                shape: BoxShape.circle,
+                border: Border.all(
+                    color: Colors.white.withOpacity(0.5), width: 2),
+              ),
+              child: Center(
+                child: Text(widget.emoji,
+                    style: const TextStyle(fontSize: 30)),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              widget.label,
+              style: GoogleFonts.nunito(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: Colors.white.withOpacity(0.9),
+              ),
+            ),
           ],
         ),
       ),
@@ -232,30 +397,27 @@ class _StarBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.18),
         borderRadius: BorderRadius.circular(28),
-        border:
-            Border.all(color: Colors.white.withOpacity(0.4), width: 2),
+        border: Border.all(color: Colors.white.withOpacity(0.4), width: 2),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          ...List.generate(
-            total,
-            (i) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 3),
-              child: Text(
-                i < stars ? '⭐' : '☆',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: i < stars ? null : Colors.white38,
-                ),
+        children: List.generate(
+          total,
+          (i) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            child: Text(
+              i < stars ? '⭐' : '☆',
+              style: TextStyle(
+                fontSize: 30,
+                color: i < stars ? null : Colors.white38,
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -291,7 +453,7 @@ class _ActionButton extends StatelessWidget {
               ? null
               : [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
+                    color: Colors.black.withOpacity(0.2),
                     blurRadius: 14,
                     offset: const Offset(0, 5),
                   )
