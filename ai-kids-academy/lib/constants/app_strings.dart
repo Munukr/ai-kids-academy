@@ -739,4 +739,94 @@ Progress is saved on the device.''';
         return n == 1 ? 'You created 1 scene! 🎨' : 'You created $n scenes! 🎨';
     }
   }
+
+  // ── v0.9 Remote lessons ──────────────────────────────────────────────────
+
+  static String appVersionLabel(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Версия приложения:';
+      case AppLanguage.he:
+        return ':גרסת אפליקציה';
+      case AppLanguage.en:
+        return 'App version:';
+    }
+  }
+
+  static String contentVersionLabel(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Версия уроков:';
+      case AppLanguage.he:
+        return ':גרסת שיעורים';
+      case AppLanguage.en:
+        return 'Lessons version:';
+    }
+  }
+
+  static String checkForUpdates(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Проверить обновления уроков';
+      case AppLanguage.he:
+        return 'בדוק עדכוני שיעורים';
+      case AppLanguage.en:
+        return 'Check for Lesson Updates';
+    }
+  }
+
+  static String checking(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Проверяем…';
+      case AppLanguage.he:
+        return 'בודק…';
+      case AppLanguage.en:
+        return 'Checking…';
+    }
+  }
+
+  static String lessonsUpToDate(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Уроки актуальны';
+      case AppLanguage.he:
+        return 'השיעורים עדכניים';
+      case AppLanguage.en:
+        return 'Lessons are up to date';
+    }
+  }
+
+  static String lessonsUpdated(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Новые уроки загружены';
+      case AppLanguage.he:
+        return 'שיעורים חדשים הורדו';
+      case AppLanguage.en:
+        return 'New lessons downloaded';
+    }
+  }
+
+  static String lessonsNoInternet(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Нет интернета, используем встроенные уроки';
+      case AppLanguage.he:
+        return 'אין אינטרנט, משתמשים בשיעורים המובנים';
+      case AppLanguage.en:
+        return 'No internet, using built-in lessons';
+    }
+  }
+
+  static String lessonUpdateFailed(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Обновление не удалось, используем локальные уроки';
+      case AppLanguage.he:
+        return 'העדכון נכשל, משתמשים בשיעורים המקומיים';
+      case AppLanguage.en:
+        return 'Update failed, using safe local lessons';
+    }
+  }
 }

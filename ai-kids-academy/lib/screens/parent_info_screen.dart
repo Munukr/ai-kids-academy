@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import '../providers/language_provider.dart';
+import '../services/lesson_service.dart';
+import '../services/remote_lesson_service.dart';
 import '../utils/transitions.dart';
 import 'language_selection_screen.dart';
 import 'settings_screen.dart';
@@ -23,10 +25,15 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
   Map<String, int> _feedback = {'fun': 0, 'okay': 0, 'boring': 0};
   bool _loadedFeedback = false;
 
+  String _contentVersion = '';
+  String? _updateStatus;
+  bool _isChecking = false;
+
   @override
   void initState() {
     super.initState();
     _loadFeedback();
+    _loadVersionInfo();
   }
 
   Future<void> _loadFeedback() async {
@@ -45,6 +52,49 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
     } catch (_) {
       setState(() => _loadedFeedback = true);
     }
+  }
+
+  Future<void> _loadVersionInfo() async {
+    final v = await RemoteLessonService.getCachedVersion();
+    if (mounted) setState(() => _contentVersion = v);
+  }
+
+  Future<void> _checkForUpdates(AppLanguage l) async {
+    if (_isChecking) return;
+    setState(() {
+      _isChecking = true;
+      _updateStatus = null;
+    });
+
+    final result = await RemoteLessonService.checkAndUpdate();
+
+    // Clear in-memory lesson cache so the next lesson load picks up new data.
+    if (result == RemoteUpdateResult.updated) {
+      LessonService.clearCache();
+    }
+
+    // Reload the cached version string.
+    final v = await RemoteLessonService.getCachedVersion();
+
+    if (!mounted) return;
+    setState(() {
+      _isChecking = false;
+      _contentVersion = v;
+      switch (result) {
+        case RemoteUpdateResult.upToDate:
+          _updateStatus = AppStrings.lessonsUpToDate(l);
+          break;
+        case RemoteUpdateResult.updated:
+          _updateStatus = AppStrings.lessonsUpdated(l);
+          break;
+        case RemoteUpdateResult.noInternet:
+          _updateStatus = AppStrings.lessonsNoInternet(l);
+          break;
+        case RemoteUpdateResult.failed:
+          _updateStatus = AppStrings.lessonUpdateFailed(l);
+          break;
+      }
+    });
   }
 
   @override
@@ -77,6 +127,8 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
                           const SizedBox(height: 8),
                           _buildMascotCard(lang.mascotName),
                           const SizedBox(height: 20),
+                          _buildVersionCard(l),
+                          const SizedBox(height: 20),
                           if (_loadedFeedback) ...[
                             _buildFeedbackCard(l),
                             const SizedBox(height: 20),
@@ -85,6 +137,8 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
                           const SizedBox(height: 20),
                           _buildSafetyCard(l),
                           const SizedBox(height: 20),
+                          _buildUpdateButton(l),
+                          const SizedBox(height: 12),
                           _buildSettingsButton(context, l),
                           const SizedBox(height: 12),
                           _buildLanguageButton(context, l),
@@ -197,7 +251,7 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    'v0.8 — TTS Narration · Playful Quiz · Feedback',
+                    'v0.9 — Remote Lessons · TTS · Playful Quiz',
                     style: GoogleFonts.nunito(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -209,6 +263,175 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildVersionCard(AppLanguage l) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: const [
+          BoxShadow(
+              color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _VersionRow(
+            icon: Icons.phone_android_rounded,
+            label: AppStrings.appVersionLabel(l),
+            value: 'v0.9',
+            color: AppColors.primary,
+          ),
+          const SizedBox(height: 10),
+          _VersionRow(
+            icon: Icons.auto_stories_rounded,
+            label: AppStrings.contentVersionLabel(l),
+            value: _contentVersion.isEmpty ? '…' : _contentVersion,
+            color: const Color(0xFF4CAF50),
+          ),
+          if (_updateStatus != null) ...[
+            const SizedBox(height: 14),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: _statusColor(_updateStatus!).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                    color: _statusColor(_updateStatus!).withOpacity(0.35)),
+              ),
+              child: Row(
+                children: [
+                  Icon(_statusIcon(_updateStatus!),
+                      color: _statusColor(_updateStatus!), size: 18),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      _updateStatus!,
+                      style: GoogleFonts.nunito(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: _statusColor(_updateStatus!),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Color _statusColor(String status) {
+    if (status.contains('✓') ||
+        status.toLowerCase().contains('up to date') ||
+        status.toLowerCase().contains('актуальны') ||
+        status.toLowerCase().contains('עדכניים')) {
+      return const Color(0xFF4CAF50);
+    }
+    if (status.toLowerCase().contains('download') ||
+        status.toLowerCase().contains('загруж') ||
+        status.toLowerCase().contains('הורד')) {
+      return const Color(0xFF6C63FF);
+    }
+    if (status.toLowerCase().contains('internet') ||
+        status.toLowerCase().contains('интернет') ||
+        status.toLowerCase().contains('אינטרנט')) {
+      return const Color(0xFFFF9800);
+    }
+    return const Color(0xFF9E9E9E);
+  }
+
+  IconData _statusIcon(String status) {
+    if (status.toLowerCase().contains('up to date') ||
+        status.toLowerCase().contains('актуальны') ||
+        status.toLowerCase().contains('עדכניים')) {
+      return Icons.check_circle_rounded;
+    }
+    if (status.toLowerCase().contains('download') ||
+        status.toLowerCase().contains('загруж') ||
+        status.toLowerCase().contains('הורד')) {
+      return Icons.download_done_rounded;
+    }
+    if (status.toLowerCase().contains('internet') ||
+        status.toLowerCase().contains('интернет') ||
+        status.toLowerCase().contains('אינטרנט')) {
+      return Icons.wifi_off_rounded;
+    }
+    return Icons.error_outline_rounded;
+  }
+
+  Widget _buildUpdateButton(AppLanguage l) {
+    return GestureDetector(
+      onTap: _isChecking ? null : () => _checkForUpdates(l),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: _isChecking
+                ? [const Color(0xFFB0BEC5), const Color(0xFF90A4AE)]
+                : [const Color(0xFF43A047), const Color(0xFF1B5E20)],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: (_isChecking
+                      ? const Color(0xFFB0BEC5)
+                      : const Color(0xFF43A047))
+                  .withOpacity(0.35),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Center(
+          child: _isChecking
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2.5, color: Colors.white),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      AppStrings.checking(l),
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                )
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.cloud_download_rounded,
+                        color: Colors.white, size: 20),
+                    const SizedBox(width: 10),
+                    Text(
+                      AppStrings.checkForUpdates(l),
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }
@@ -490,6 +713,58 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
           ['👨‍👩‍👧', 'Designed for ages 5–7'],
         ];
     }
+  }
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+class _VersionRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+
+  const _VersionRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: color, size: 18),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            label,
+            style: GoogleFonts.nunito(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ),
+        Text(
+          value,
+          style: GoogleFonts.nunito(
+            fontSize: 15,
+            fontWeight: FontWeight.w800,
+            color: color,
+          ),
+        ),
+      ],
+    );
   }
 }
 
