@@ -876,17 +876,6 @@ Progress is saved on the device.''';
     }
   }
 
-  static String locked(AppLanguage lang) {
-    switch (lang) {
-      case AppLanguage.ru:
-        return 'Заблокировано';
-      case AppLanguage.he:
-        return 'נעול';
-      case AppLanguage.en:
-        return 'Locked';
-    }
-  }
-
   /// Returns the emoji for a badge ID.
   static String badgeEmoji(String id) {
     const map = {
