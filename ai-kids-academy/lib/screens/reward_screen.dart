@@ -9,11 +9,14 @@ import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import '../models/lesson.dart';
 import '../providers/language_provider.dart';
+import '../providers/progress_provider.dart';
+import '../services/badge_service.dart';
 import '../services/narration_service.dart';
 import '../services/sound_service.dart';
 import '../utils/transitions.dart';
 import '../widgets/confetti_widget.dart';
 import '../widgets/mascot_widget.dart';
+import 'badge_cabinet_screen.dart';
 import 'lesson_map_screen.dart';
 import 'lesson_screen.dart';
 
@@ -44,6 +47,7 @@ class _RewardScreenState extends State<RewardScreen>
   late final AnimationController _starCtrl;
   late final AnimationController _contentCtrl;
   String? _feedbackGiven;
+  List<String> _newBadges = [];
 
   @override
   void initState() {
@@ -70,6 +74,20 @@ class _RewardScreenState extends State<RewardScreen>
             context.read<LanguageProvider>().language;
         NarrationService.instance
             .speakAuto(AppStrings.beepProud(lang), lang);
+      }
+    });
+    Future.delayed(const Duration(milliseconds: 1000), () async {
+      if (!mounted) return;
+      final completedCount =
+          context.read<ProgressProvider>().completedCount;
+      final isPerfect =
+          widget.correctAnswers == widget.totalQuestions;
+      final newly = await BadgeService.checkLessonMilestones(
+        completedCount: completedCount,
+        wasPerfectQuiz: isPerfect,
+      );
+      if (mounted && newly.isNotEmpty) {
+        setState(() => _newBadges = newly);
       }
     });
   }
@@ -188,6 +206,10 @@ class _RewardScreenState extends State<RewardScreen>
                                     ),
                                   ),
                                   const SizedBox(height: 20),
+                                  if (_newBadges.isNotEmpty)
+                                    _buildBadgeUnlockCard(l),
+                                  if (_newBadges.isNotEmpty)
+                                    const SizedBox(height: 16),
                                   _buildFeedbackSection(l),
                                   const SizedBox(height: 20),
                                   if (hasNext) ...[
@@ -304,6 +326,94 @@ class _RewardScreenState extends State<RewardScreen>
                 onTap: () => _recordFeedback('boring'),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBadgeUnlockCard(AppLanguage l) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOutBack,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFFFD700).withOpacity(0.45),
+            blurRadius: 18,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('🏆', style: TextStyle(fontSize: 24)),
+              const SizedBox(width: 8),
+              Text(
+                AppStrings.newBadgeUnlocked(l),
+                style: GoogleFonts.nunito(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ..._newBadges.map((id) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(AppStrings.badgeEmoji(id),
+                        style: const TextStyle(fontSize: 28)),
+                    const SizedBox(width: 10),
+                    Text(
+                      AppStrings.badgeName(id, l),
+                      style: GoogleFonts.nunito(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: () {
+              SoundService.instance.tap();
+              Navigator.of(context)
+                  .push(beepRoute(page: const BadgeCabinetScreen()));
+            },
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.28),
+                borderRadius: BorderRadius.circular(14),
+                border:
+                    Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
+              ),
+              child: Text(
+                AppStrings.viewBadges(l),
+                style: GoogleFonts.nunito(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
         ],
       ),

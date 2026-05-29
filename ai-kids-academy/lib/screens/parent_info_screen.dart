@@ -11,6 +11,8 @@ import '../providers/language_provider.dart';
 import '../services/lesson_service.dart';
 import '../services/remote_lesson_service.dart';
 import '../utils/transitions.dart';
+import 'about_screen.dart';
+import 'badge_cabinet_screen.dart';
 import 'language_selection_screen.dart';
 import 'settings_screen.dart';
 
@@ -142,6 +144,10 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
                           _buildSettingsButton(context, l),
                           const SizedBox(height: 12),
                           _buildLanguageButton(context, l),
+                          const SizedBox(height: 12),
+                          _buildAboutButton(context, l),
+                          const SizedBox(height: 12),
+                          _buildBadgesButton(context, l),
                           const SizedBox(height: 24),
                         ],
                       ),
@@ -251,7 +257,7 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    'v0.9 — Remote Lessons · TTS · Playful Quiz',
+                    'v1.0 — Badges · Remote Lessons · TTS',
                     style: GoogleFonts.nunito(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -670,6 +676,82 @@ class _ParentInfoScreenState extends State<ParentInfoScreen> {
               const SizedBox(width: 10),
               Text(
                 AppStrings.changeLanguage(l),
+                style: GoogleFonts.nunito(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAboutButton(BuildContext context, AppLanguage l) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        beepRoute(page: const AboutScreen()),
+      ),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.black12, blurRadius: 8, offset: Offset(0, 3)),
+          ],
+        ),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.info_outline_rounded,
+                  color: AppColors.primary, size: 20),
+              const SizedBox(width: 10),
+              Text(
+                AppStrings.aboutTitle(l),
+                style: GoogleFonts.nunito(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBadgesButton(BuildContext context, AppLanguage l) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        beepRoute(page: const BadgeCabinetScreen()),
+      ),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.black12, blurRadius: 8, offset: Offset(0, 3)),
+          ],
+        ),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.emoji_events_rounded,
+                  color: Color(0xFFFFD700), size: 22),
+              const SizedBox(width: 10),
+              Text(
+                AppStrings.badgeCabinetTitle(l),
                 style: GoogleFonts.nunito(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,

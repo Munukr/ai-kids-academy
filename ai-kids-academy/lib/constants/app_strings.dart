@@ -829,4 +829,273 @@ Progress is saved on the device.''';
         return 'Update failed, using safe local lessons';
     }
   }
+
+  // ── v1.0 Badge Cabinet ───────────────────────────────────────────────────────
+
+  static String badgeCabinetTitle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Витрина значков';
+      case AppLanguage.he:
+        return 'ארון תגים';
+      case AppLanguage.en:
+        return 'Badge Cabinet';
+    }
+  }
+
+  static String badgesEarned(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'заработано';
+      case AppLanguage.he:
+        return 'הושגו';
+      case AppLanguage.en:
+        return 'earned';
+    }
+  }
+
+  static String newBadgeUnlocked(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Новый значок!';
+      case AppLanguage.he:
+        return '!תג חדש';
+      case AppLanguage.en:
+        return 'New Badge!';
+    }
+  }
+
+  static String viewBadges(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Посмотреть значки';
+      case AppLanguage.he:
+        return 'צפה בתגים';
+      case AppLanguage.en:
+        return 'View Badges';
+    }
+  }
+
+  static String locked(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Заблокировано';
+      case AppLanguage.he:
+        return 'נעול';
+      case AppLanguage.en:
+        return 'Locked';
+    }
+  }
+
+  /// Returns the emoji for a badge ID.
+  static String badgeEmoji(String id) {
+    const map = {
+      'first_lesson': '🌟',
+      'three_lessons': '🔥',
+      'five_lessons': '🚀',
+      'all_done': '👑',
+      'ai_explorer': '🧪',
+      'perfect_quiz': '⭐',
+      'creative_thinker': '🎨',
+    };
+    return map[id] ?? '🏅';
+  }
+
+  /// Returns the localised name for a badge ID.
+  static String badgeName(String id, AppLanguage lang) {
+    const en = {
+      'first_lesson': 'First Step!',
+      'three_lessons': 'On a Roll!',
+      'five_lessons': 'Star Learner',
+      'all_done': 'AI Master',
+      'ai_explorer': 'AI Explorer',
+      'perfect_quiz': 'Quiz Champion',
+      'creative_thinker': 'Creative Thinker',
+    };
+    const ru = {
+      'first_lesson': 'Первый шаг!',
+      'three_lessons': 'В ударе!',
+      'five_lessons': 'Звёздный ученик',
+      'all_done': 'Мастер ИИ',
+      'ai_explorer': 'Исследователь ИИ',
+      'perfect_quiz': 'Чемпион викторины',
+      'creative_thinker': 'Творческий мыслитель',
+    };
+    const he = {
+      'first_lesson': '!צעד ראשון',
+      'three_lessons': '!בדרך הנכונה',
+      'five_lessons': 'לומד מצטיין',
+      'all_done': 'מאסטר AI',
+      'ai_explorer': 'חוקר AI',
+      'perfect_quiz': 'אלוף החידונים',
+      'creative_thinker': 'חושב יצירתי',
+    };
+    switch (lang) {
+      case AppLanguage.en:
+        return en[id] ?? id;
+      case AppLanguage.ru:
+        return ru[id] ?? id;
+      case AppLanguage.he:
+        return he[id] ?? id;
+    }
+  }
+
+  /// Returns the localised description for a badge ID.
+  static String badgeDesc(String id, AppLanguage lang) {
+    const en = {
+      'first_lesson': 'Completed your first lesson',
+      'three_lessons': 'Completed 3 lessons',
+      'five_lessons': 'Completed 5 lessons',
+      'all_done': 'Completed all 12 lessons!',
+      'ai_explorer': 'Visited the AI Lab',
+      'perfect_quiz': 'Perfect score on a quiz',
+      'creative_thinker': 'Created 5 stories in the AI Lab',
+    };
+    const ru = {
+      'first_lesson': 'Завершил первый урок',
+      'three_lessons': 'Завершил 3 урока',
+      'five_lessons': 'Завершил 5 уроков',
+      'all_done': 'Завершил все 12 уроков!',
+      'ai_explorer': 'Посетил Лабораторию ИИ',
+      'perfect_quiz': 'Прошёл викторину без ошибок',
+      'creative_thinker': 'Создал 5 историй в лаборатории',
+    };
+    const he = {
+      'first_lesson': 'השלמת את השיעור הראשון',
+      'three_lessons': 'השלמת 3 שיעורים',
+      'five_lessons': 'השלמת 5 שיעורים',
+      'all_done': '!השלמת את כל 12 השיעורים',
+      'ai_explorer': 'ביקרת במעבדת ה-AI',
+      'perfect_quiz': 'ציון מושלם בחידון',
+      'creative_thinker': 'יצרת 5 סיפורים במעבדה',
+    };
+    switch (lang) {
+      case AppLanguage.en:
+        return en[id] ?? id;
+      case AppLanguage.ru:
+        return ru[id] ?? id;
+      case AppLanguage.he:
+        return he[id] ?? id;
+    }
+  }
+
+  // ── v1.0 About Screen ────────────────────────────────────────────────────────
+
+  static String aboutTitle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'О приложении';
+      case AppLanguage.he:
+        return 'אודות';
+      case AppLanguage.en:
+        return 'About';
+    }
+  }
+
+  static String aboutPrivacyTitle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Конфиденциальность';
+      case AppLanguage.he:
+        return 'פרטיות';
+      case AppLanguage.en:
+        return 'Privacy';
+    }
+  }
+
+  static String aboutPrivacyBody(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Персональные данные не собираются. Интернет не требуется. Без аккаунтов. Безопасно для детей.';
+      case AppLanguage.he:
+        return 'לא נאסף מידע אישי. לא נדרש חיבור לאינטרנט. ללא חשבונות. בטוח לילדים.';
+      case AppLanguage.en:
+        return 'No personal data collected. No internet required. No accounts. Safe for children.';
+    }
+  }
+
+  static String aboutTermsTitle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Условия использования';
+      case AppLanguage.he:
+        return 'תנאי שימוש';
+      case AppLanguage.en:
+        return 'Terms of Use';
+    }
+  }
+
+  static String aboutTermsBody(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Приложение создано в образовательных целях. Весь контент безопасен для детей. Без покупок.';
+      case AppLanguage.he:
+        return 'האפליקציה מסופקת למטרות חינוכיות. כל התוכן בטוח לילדים. ללא רכישות.';
+      case AppLanguage.en:
+        return 'For educational purposes. All content is safe for children. No purchases required.';
+    }
+  }
+
+  static String aboutCreditsTitle(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'Создано с ❤️';
+      case AppLanguage.he:
+        return 'נבנה עם ❤️';
+      case AppLanguage.en:
+        return 'Built with ❤️';
+    }
+  }
+
+  static String aboutCreditsBody(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return 'AI Kids Academy создан на Flutter.\nДля детей 5–7 лет.\nРобот Бип всегда рядом!';
+      case AppLanguage.he:
+        return 'AI Kids Academy נבנה עם Flutter.\nלילדים בגילאי 5–7.\n!הרובוט ביפ תמיד כאן';
+      case AppLanguage.en:
+        return 'AI Kids Academy is built with Flutter.\nDesigned for children aged 5–7.\nRobot Beep is always here!';
+    }
+  }
+
+  // ── v1.0 Beep Encouragements ─────────────────────────────────────────────────
+
+  /// Returns a list of Beep encouragement phrases for random selection.
+  static List<String> beepEncouragements(AppLanguage lang) {
+    switch (lang) {
+      case AppLanguage.ru:
+        return [
+          'Вау!',
+          'Как творчески!',
+          'Ты потрясающий!',
+          'Отличная мысль!',
+          'Я так горжусь тобой!',
+          'Ты умнеешь с каждым днём!',
+          'Продолжай!',
+          'Отличная работа!',
+        ];
+      case AppLanguage.he:
+        return [
+          '!וואו',
+          '!כמה יצירתי',
+          '!אתה מדהים',
+          '!חשיבה נהדרת',
+          '!אני כל כך גאה בך',
+          '!אתה נעשה חכם יותר כל יום',
+          '!המשך כך',
+          '!עבודה מצוינת',
+        ];
+      case AppLanguage.en:
+        return [
+          'Wow!',
+          "That's creative!",
+          "You're amazing!",
+          'Great thinking!',
+          "I'm so proud of you!",
+          "You're getting smarter every day!",
+          'Keep going!',
+          'Super work!',
+        ];
+    }
+  }
 }

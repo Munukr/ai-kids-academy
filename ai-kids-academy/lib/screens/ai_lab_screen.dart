@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/app_strings.dart';
 import '../providers/language_provider.dart';
+import '../services/badge_service.dart';
 import '../services/sound_service.dart';
 import '../utils/transitions.dart';
 import '../widgets/confetti_widget.dart';
@@ -654,6 +655,11 @@ class _AiLabScreenState extends State<AiLabScreen>
         vsync: this, duration: const Duration(milliseconds: 700));
     _stepCtrl.forward();
     _loadCount();
+    _grantLabBadge();
+  }
+
+  Future<void> _grantLabBadge() async {
+    await BadgeService.awardAiExplorer();
   }
 
   @override
@@ -672,6 +678,9 @@ class _AiLabScreenState extends State<AiLabScreen>
     final prefs = await SharedPreferences.getInstance();
     if (mounted) setState(() => _sceneCount++);
     await prefs.setInt('scenes_created', _sceneCount);
+    if (_sceneCount >= 5) {
+      await BadgeService.awardCreativeThinker();
+    }
   }
 
   void _selectChoice(int index) {

@@ -11,7 +11,9 @@ import '../providers/progress_provider.dart';
 import '../services/lesson_service.dart';
 import '../services/sound_service.dart';
 import '../utils/transitions.dart';
+import 'about_screen.dart';
 import 'ai_lab_screen.dart';
+import 'badge_cabinet_screen.dart';
 import 'lesson_screen.dart';
 import 'progress_screen.dart';
 import 'parent_info_screen.dart';
@@ -211,6 +213,14 @@ class _LessonMapScreenState extends State<LessonMapScreen>
           const SizedBox(width: 8),
           _IconBtn(
             onTap: () => Navigator.of(context).push(
+              beepRoute(page: const BadgeCabinetScreen()),
+            ),
+            child: const Icon(Icons.emoji_events_rounded,
+                color: Colors.white, size: 20),
+          ),
+          const SizedBox(width: 8),
+          _IconBtn(
+            onTap: () => Navigator.of(context).push(
               beepRoute(page: const ProgressScreen()),
             ),
             child: const Icon(Icons.bar_chart_rounded,
@@ -222,6 +232,14 @@ class _LessonMapScreenState extends State<LessonMapScreen>
               beepRoute(page: const ParentInfoScreen()),
             ),
             child: const Icon(Icons.family_restroom_rounded,
+                color: Colors.white, size: 20),
+          ),
+          const SizedBox(width: 8),
+          _IconBtn(
+            onTap: () => Navigator.of(context).push(
+              beepRoute(page: const AboutScreen()),
+            ),
+            child: const Icon(Icons.info_outline_rounded,
                 color: Colors.white, size: 20),
           ),
         ],
